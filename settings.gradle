@@ -1,2 +1,3 @@
+include ':ReaderLibrary'
 include ':TrditionalReader'
 rootProject.name = "MuziReader"

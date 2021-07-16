@@ -3,9 +3,16 @@ plugins {
     id 'kotlin-android'
 }
 
+ext{
+    def localProp = new File(rootDir, "local.properties")
+    prop = new Properties()
+    localProp.withInputStream {
+        prop.load(it)
+    }
+}
+
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.fathouse.muzireader"
@@ -17,9 +24,20 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        config{
+            keyAlias prop.getProperty('keyalias')
+            keyPassword prop.getProperty('keypassword')
+            storeFile file(prop.getProperty('keyfile'))
+            storePassword prop.getProperty('keystorepassword')
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
